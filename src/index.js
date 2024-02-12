@@ -1,8 +1,8 @@
-require('dotenv').config;
+require('dotenv').config(); 
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const {router} = require('./routes')
+const { router } = require('./routes');
 
 // Crear una instancia de la aplicación Express
 const app = express();
@@ -15,7 +15,7 @@ app.use(cors());
 app.use('/', router)
 
 // Iniciar el servidor
-const PORT = process.env.PORT || 3000;
+const PORT = 4000;
 app.listen(PORT, () => {
     console.log(`Servidor en ejecución en el puerto ${PORT}`);
 });
