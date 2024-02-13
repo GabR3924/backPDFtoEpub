@@ -1,26 +1,27 @@
-const fs = require('fs')
-const pdfParser = require('pdf-parser');
+const fs = require('fs');
+const PDFParser = require('pdf-parse');
 
 const readPdf = async (req, res) => {
-
     const pdfPath = req.body.file;
 
-    fs.readFile(pdfPath, 'utf8', (err, data) => {
-        if (err) {
-            console.error('Error al leer el archivo PDF:', err);
-            res.status(500).json({ error: 'Error al leer el archivo PDF' });
-            return;
-        }
+    console.log('Ruta del archivo PDF:', pdfPath);
 
-        // El contenido del archivo PDF está en el buffer "data"
-        // Aquí es donde comenzarías a analizar el contenido del archivo PDF
-        // y extraer la información que necesitas
+    try {
+        // const dataBuffer = fs.readFileSync(pdfPath);
         console.log('Contenido del archivo PDF:');
-        return res.status(200).json({data})
-        // Aquí puedes realizar cualquier procesamiento adicional con "data"
-        // Por ejemplo, puedes llamar a una función para analizar el PDF
-        // parsePdf(data);
-    });
 
-}
-exports.readPdf = readPdf; 
+        // Parsear el contenido del PDF usando pdf-parse
+        const data = await PDFParser(pdfPath);
+
+        console.log('Texto extraído del archivo PDF:', data.text);
+
+        // Aquí puedes procesar el texto como desees
+        // Por ejemplo, puedes enviarlo como respuesta JSON
+        res.status(200).json({ text: data.text });
+    } catch (error) {
+        console.error('Error al cargar o procesar el PDF:', error);
+        res.status(500).json({ error: 'Error al cargar o procesar el PDF' });
+    }
+};
+
+exports.readPdf = readPdf;
